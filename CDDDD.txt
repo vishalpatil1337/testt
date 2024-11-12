@@ -1,1 +1,4 @@
 http://plugins.nessus.org/get.php?f=all-2.0.tar.gz&u=bf6b0d545b68e0f038751a2761651b79&p=4988422282a2570aa1d8cc267c639568
+
+
+https://home.controlcase.com/downloads/CDD_10.9.2.0_HTTPS_For_WinRM.exe
