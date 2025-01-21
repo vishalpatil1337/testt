@@ -15,6 +15,14 @@ set "IPS_PER_FILE=20"
 set "SUBNETS_PER_FILE=3"
 set "INPUT_FILE=scope.txt"
 
+REM Example format to show at the start
+echo Example Input Format for scope.txt:
+echo   IP Addresses:        Subnets:
+echo   192.168.1.1         192.168.0.0/24
+echo   10.0.0.1            10.0.0.0/16
+echo   172.16.1.1          172.16.0.0/12
+echo.
+
 REM ===============================================================================
 REM                              Initialization Check
 REM ===============================================================================
@@ -22,7 +30,7 @@ echo [*] Checking environment...
 echo [*] Verifying input file...
 if not exist "%INPUT_FILE%" (
     echo [!] Error: %INPUT_FILE% not found!
-    echo [!] Please ensure %INPUT_FILE% exists in the current directory.
+    echo [!] Please create %INPUT_FILE% with your IPs and subnets.
     echo.
     pause
     exit /b 1
@@ -39,11 +47,13 @@ if not exist "temp" mkdir temp
 echo [+] Creating temporary sorting files...
 type nul > "temp\temp_ips.txt"
 type nul > "temp\temp_subnets.txt"
+type nul > "temp\unique_ips.txt"
+type nul > "temp\unique_subnets.txt"
 
 REM ===============================================================================
-REM                              IP/Subnet Sorting
+REM                              Duplicate Removal
 REM ===============================================================================
-echo [*] Sorting IPs and Subnets...
+echo [*] Removing duplicates and sorting entries...
 for /f "tokens=*" %%a in (%INPUT_FILE%) do (
     echo %%a | findstr /r /c:"/" >nul
     if errorlevel 1 (
@@ -52,6 +62,20 @@ for /f "tokens=*" %%a in (%INPUT_FILE%) do (
         echo %%a >> "temp\temp_subnets.txt"
     )
 )
+
+REM Sort and remove duplicates from IPs
+sort "temp\temp_ips.txt" /unique > "temp\unique_ips.txt"
+sort "temp\temp_subnets.txt" /unique > "temp\unique_subnets.txt"
+
+REM Count unique entries
+set /a "unique_ips=0"
+for /f %%a in ('type "temp\unique_ips.txt"^|find /c /v ""') do set /a "unique_ips=%%a"
+set /a "unique_subnets=0"
+for /f %%a in ('type "temp\unique_subnets.txt"^|find /c /v ""') do set /a "unique_subnets=%%a"
+
+echo [+] Found %unique_ips% unique IP addresses
+echo [+] Found %unique_subnets% unique subnets
+echo.
 
 REM ===============================================================================
 REM                              File Generation
@@ -66,7 +90,7 @@ set /a subnet_count=0
 
 echo [+] Creating IP files (max %IPS_PER_FILE% IPs per file)...
 type nul > "output\scope%ip_file_count%.txt"
-for /f "tokens=*" %%a in ('type "temp\temp_ips.txt"') do (
+for /f "tokens=*" %%a in ('type "temp\unique_ips.txt"') do (
     echo %%a >> "output\scope!ip_file_count!.txt"
     set /a ip_count+=1
     if !ip_count! equ %IPS_PER_FILE% (
@@ -79,7 +103,7 @@ for /f "tokens=*" %%a in ('type "temp\temp_ips.txt"') do (
 
 echo [+] Creating subnet files (max %SUBNETS_PER_FILE% subnets per file)...
 type nul > "output\subnet%subnet_file_count%.txt"
-for /f "tokens=*" %%a in ('type "temp\temp_subnets.txt"') do (
+for /f "tokens=*" %%a in ('type "temp\unique_subnets.txt"') do (
     echo %%a >> "output\subnet!subnet_file_count!.txt"
     set /a subnet_count+=1
     if !subnet_count! equ %SUBNETS_PER_FILE% (
@@ -102,22 +126,66 @@ for %%f in ("output\scope*.txt" "output\subnet*.txt") do (
 rd /s /q "temp" 2>nul
 
 REM ===============================================================================
-REM                              Nmap Configuration
+REM                              Nmap Path Check
 REM ===============================================================================
 echo [*] Configuring Nmap...
-set "nmap_command=nmap"
+
+:NMAP_PATH_CHECK
+set "nmap_found=false"
+
+REM Check if path is stored in nmap.txt
 if exist "nmap.txt" (
     set /p nmap_command=<nmap.txt
-) else (
-    where nmap >nul 2>&1
-    if errorlevel 1 (
-        echo [!] Nmap not found in PATH
-        echo [?] Please enter the full path to nmap.exe
-        set /p nmap_path="    Path (e.g., C:\Program Files\Nmap\nmap.exe): "
-        echo !nmap_path!> nmap.txt
-        set "nmap_command=!nmap_path!"
+    "!nmap_command!" -h >nul 2>&1
+    if !errorlevel! equ 0 (
+        set "nmap_found=true"
+        echo [+] Using nmap from saved path: !nmap_command!
+        goto NMAP_FOUND
     )
 )
+
+REM Check common nmap locations
+for %%p in (
+    "nmap.exe"
+    "C:\Program Files\Nmap\nmap.exe"
+    "C:\Program Files (x86)\Nmap\nmap.exe"
+) do (
+    %%p -h >nul 2>&1
+    if !errorlevel! equ 0 (
+        set "nmap_command=%%p"
+        set "nmap_found=true"
+        echo [+] Found nmap at: %%p
+        echo %%p> nmap.txt
+        goto NMAP_FOUND
+    )
+)
+
+:NMAP_INPUT
+if "!nmap_found!"=="false" (
+    echo [!] Nmap not found in common locations
+    echo [?] Please enter the full path to nmap.exe
+    echo     Example: C:\Program Files\Nmap\nmap.exe
+    set /p "nmap_path=Path: "
+    
+    if not exist "!nmap_path!" (
+        echo [!] Invalid path. File does not exist.
+        goto NMAP_INPUT
+    )
+    
+    "!nmap_path!" -h >nul 2>&1
+    if !errorlevel! equ 0 (
+        set "nmap_command=!nmap_path!"
+        echo !nmap_path!> nmap.txt
+        echo [+] Nmap path verified and saved
+    ) else (
+        echo [!] Invalid nmap executable. Please try again.
+        goto NMAP_INPUT
+    )
+)
+
+:NMAP_FOUND
+echo [+] Nmap configuration completed
+echo.
 
 REM ===============================================================================
 REM                              Scanning Section
@@ -139,6 +207,8 @@ echo ===========================================================================
 echo                               Scan Summary
 echo ===============================================================================
 echo [+] All scans completed successfully
+echo [+] Processed %unique_ips% unique IP addresses
+echo [+] Processed %unique_subnets% unique subnets
 echo [+] Output files are located in the 'output' directory
 echo [+] Review the results in the generated .nmap, .xml, and .gnmap files
 echo.
