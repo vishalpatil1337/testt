@@ -1,278 +1,216 @@
 @echo off
 setlocal enabledelayedexpansion
 cls
-color 0B
 
-REM ===============================================================================
-REM                        Nmap Automation Framework
-REM                           Version 2.0
-REM ===============================================================================
-
-:INITIALIZE_VARS
-set "VERSION=2.0"
-set "TOOL_NAME=Nmap Automation Framework"
-set "IPS_PER_FILE=20"
-set "SUBNETS_PER_FILE=3"
-set "INPUT_FILE=scope.txt"
-set "BASE_DIR=%~dp0"
-set "OUTPUT_DIR=%BASE_DIR%output"
-set "TEMP_DIR=%BASE_DIR%temp"
-set "LOGS_DIR=%OUTPUT_DIR%\logs"
-set "COMMANDS_DIR=%OUTPUT_DIR%\commands"
-set "CONFIG_DIR=%BASE_DIR%config"
-
-:SHOW_BANNER
 echo ===============================================================================
-echo                          %TOOL_NAME% v%VERSION%
+echo                           Scope Splitter and Nmap Scanner
+echo                               Created: January 2025
 echo ===============================================================================
 echo.
 
-:CREATE_DIRECTORIES
-if not exist "%OUTPUT_DIR%" mkdir "%OUTPUT_DIR%"
-if not exist "%TEMP_DIR%" mkdir "%TEMP_DIR%"
-if not exist "%LOGS_DIR%" mkdir "%LOGS_DIR%"
-if not exist "%COMMANDS_DIR%" mkdir "%COMMANDS_DIR%"
-if not exist "%CONFIG_DIR%" mkdir "%CONFIG_DIR%"
+REM ===============================================================================
+REM                              Configuration Section
+REM ===============================================================================
+set "IPS_PER_FILE=20"
+set "SUBNETS_PER_FILE=3"
+set "INPUT_FILE=scope.txt"
 
-:CHECK_INPUT_FILE
-echo [*] Validating Environment...
-echo    ^> Checking for input file: %INPUT_FILE%
+REM Example format to show at the start
+echo Example Input Format for scope.txt:
+echo   IP Addresses:        Subnets:
+echo   192.168.1.1         192.168.0.0/24
+echo   10.0.0.1            10.0.0.0/16
+echo   172.16.1.1          172.16.0.0/12
+echo.
+
+REM ===============================================================================
+REM                              Initialization Check
+REM ===============================================================================
+echo [*] Checking environment...
+echo [*] Verifying input file...
 if not exist "%INPUT_FILE%" (
-    echo.
     echo [!] Error: %INPUT_FILE% not found!
-    echo [i] Example format for scope.txt:
-    echo    IP Addresses:        Subnets:
-    echo    192.168.1.1         192.168.0.0/24
-    echo    10.0.0.1            10.0.0.0/16
+    echo [!] Please create %INPUT_FILE% with your IPs and subnets.
     echo.
     pause
     exit /b 1
 )
 
-:PROCESS_DUPLICATES
-echo [*] Processing input file...
-echo    ^> Removing duplicates and sorting entries
-type nul > "%TEMP_DIR%\temp_ips.txt"
-type nul > "%TEMP_DIR%\temp_subnets.txt"
-type nul > "%TEMP_DIR%\unique_ips.txt"
-type nul > "%TEMP_DIR%\unique_subnets.txt"
+REM ===============================================================================
+REM                              File Preparation
+REM ===============================================================================
+echo [*] Initializing temporary files...
+echo [+] Creating work directories...
+if not exist "output" mkdir output
+if not exist "temp" mkdir temp
 
+echo [+] Creating temporary sorting files...
+type nul > "temp\temp_ips.txt"
+type nul > "temp\temp_subnets.txt"
+type nul > "temp\unique_ips.txt"
+type nul > "temp\unique_subnets.txt"
+
+REM ===============================================================================
+REM                              Duplicate Removal
+REM ===============================================================================
+echo [*] Removing duplicates and sorting entries...
 for /f "tokens=*" %%a in (%INPUT_FILE%) do (
     echo %%a | findstr /r /c:"/" >nul
     if errorlevel 1 (
-        echo %%a >> "%TEMP_DIR%\temp_ips.txt"
+        echo %%a >> "temp\temp_ips.txt"
     ) else (
-        echo %%a >> "%TEMP_DIR%\temp_subnets.txt"
+        echo %%a >> "temp\temp_subnets.txt"
     )
 )
 
-sort "%TEMP_DIR%\temp_ips.txt" /unique > "%TEMP_DIR%\unique_ips.txt"
-sort "%TEMP_DIR%\temp_subnets.txt" /unique > "%TEMP_DIR%\unique_subnets.txt"
+REM Sort and remove duplicates from IPs
+sort "temp\temp_ips.txt" /unique > "temp\unique_ips.txt"
+sort "temp\temp_subnets.txt" /unique > "temp\unique_subnets.txt"
 
-:COUNT_ENTRIES
-for /f %%a in ('type "%TEMP_DIR%\unique_ips.txt"^|find /c /v ""') do set "UNIQUE_IPS=%%a"
-for /f %%a in ('type "%TEMP_DIR%\unique_subnets.txt"^|find /c /v ""') do set "UNIQUE_SUBNETS=%%a"
+REM Count unique entries
+set /a "unique_ips=0"
+for /f %%a in ('type "temp\unique_ips.txt"^|find /c /v ""') do set /a "unique_ips=%%a"
+set /a "unique_subnets=0"
+for /f %%a in ('type "temp\unique_subnets.txt"^|find /c /v ""') do set /a "unique_subnets=%%a"
 
-echo    ^> Found %UNIQUE_IPS% unique IP addresses
-echo    ^> Found %UNIQUE_SUBNETS% unique subnets
+echo [+] Found %unique_ips% unique IP addresses
+echo [+] Found %unique_subnets% unique subnets
 echo.
 
-:VERIFY_NMAP
-echo [*] Verifying Nmap Installation...
-call :FIND_NMAP
-if defined NMAP_ERROR (
-    echo [!] Nmap verification failed
-    goto :NMAP_INPUT
-) else (
-    echo    ^> Using Nmap from: %NMAP_PATH%
-    echo.
-)
+REM ===============================================================================
+REM                              File Generation
+REM ===============================================================================
+echo [*] Generating split files...
 
-:GENERATE_SCAN_FILES
-echo [*] Generating scan files...
-set /a "ip_file_count=1"
-set /a "subnet_file_count=1"
-set /a "ip_count=0"
-set /a "subnet_count=0"
+REM Initialize counters
+set /a ip_file_count=1
+set /a subnet_file_count=1
+set /a ip_count=0
+set /a subnet_count=0
 
-REM Generate IP files
-for /f "tokens=*" %%a in ('type "%TEMP_DIR%\unique_ips.txt"') do (
-    if !ip_count! equ 0 (
-        echo    ^> Creating scope!ip_file_count!.txt
-    )
-    echo %%a>> "%OUTPUT_DIR%\scope!ip_file_count!.txt"
-    set /a "ip_count+=1"
+echo [+] Creating IP files (max %IPS_PER_FILE% IPs per file)...
+type nul > "output\scope%ip_file_count%.txt"
+for /f "tokens=*" %%a in ('type "temp\unique_ips.txt"') do (
+    echo %%a >> "output\scope!ip_file_count!.txt"
+    set /a ip_count+=1
     if !ip_count! equ %IPS_PER_FILE% (
-        set /a "ip_file_count+=1"
-        set /a "ip_count=0"
+        echo     - Created scope!ip_file_count!.txt
+        set /a ip_file_count+=1
+        set /a ip_count=0
+        type nul > "output\scope!ip_file_count!.txt"
     )
 )
 
-REM Generate subnet files
-for /f "tokens=*" %%a in ('type "%TEMP_DIR%\unique_subnets.txt"') do (
-    if !subnet_count! equ 0 (
-        echo    ^> Creating subnet!subnet_file_count!.txt
-    )
-    echo %%a>> "%OUTPUT_DIR%\subnet!subnet_file_count!.txt"
-    set /a "subnet_count+=1"
+echo [+] Creating subnet files (max %SUBNETS_PER_FILE% subnets per file)...
+type nul > "output\subnet%subnet_file_count%.txt"
+for /f "tokens=*" %%a in ('type "temp\unique_subnets.txt"') do (
+    echo %%a >> "output\subnet!subnet_file_count!.txt"
+    set /a subnet_count+=1
     if !subnet_count! equ %SUBNETS_PER_FILE% (
-        set /a "subnet_file_count+=1"
-        set /a "subnet_count=0"
+        echo     - Created subnet!subnet_file_count!.txt
+        set /a subnet_file_count+=1
+        set /a subnet_count=0
+        type nul > "output\subnet!subnet_file_count!.txt"
     )
 )
 
-:GENERATE_SCAN_SCRIPTS
-echo [*] Generating scan scripts...
-
-REM Create master scan control script
-echo @echo off > "%COMMANDS_DIR%\master_scan.bat"
-echo color 0A >> "%COMMANDS_DIR%\master_scan.bat"
-echo echo =============================================================================== >> "%COMMANDS_DIR%\master_scan.bat"
-echo echo                        Nmap Automation - Master Scanner >> "%COMMANDS_DIR%\master_scan.bat"
-echo echo =============================================================================== >> "%COMMANDS_DIR%\master_scan.bat"
-echo echo. >> "%COMMANDS_DIR%\master_scan.bat"
-
-REM Generate individual scan scripts
-for %%f in ("%OUTPUT_DIR%\scope*.txt" "%OUTPUT_DIR%\subnet*.txt") do (
-    REM Create individual scan script
-    call :CREATE_SCAN_SCRIPT "%%f"
-    
-    REM Add to master script
-    echo echo [+] Launching scan for %%~nxf >> "%COMMANDS_DIR%\master_scan.bat"
-    echo start "Nmap Scan - %%~nf" cmd /k "cd /d "%%~dp0" ^& call scan_%%~nf.bat" >> "%COMMANDS_DIR%\master_scan.bat"
-    echo timeout /t 2 >> "%COMMANDS_DIR%\master_scan.bat"
-)
-
-echo echo. >> "%COMMANDS_DIR%\master_scan.bat"
-echo echo [i] All scans have been launched. Check individual windows for progress. >> "%COMMANDS_DIR%\master_scan.bat"
-echo pause >> "%COMMANDS_DIR%\master_scan.bat"
-
-:CLEANUP_AND_MENU
+REM ===============================================================================
+REM                              Cleanup Section
+REM ===============================================================================
 echo [*] Cleaning up temporary files...
-rd /s /q "%TEMP_DIR%" 2>nul
-
-echo.
-echo [*] Setup Complete!
-echo.
-echo Choose your next action:
-echo [1] Run all scans now
-echo [2] Run specific scan files
-echo [3] Exit (run scans later)
-echo.
-set /p "choice=Enter your choice (1-3): "
-
-if "%choice%"=="1" (
-    cd "%COMMANDS_DIR%"
-    call master_scan.bat
-) else if "%choice%"=="2" (
-    call :SHOW_SCAN_MENU
-) else (
-    echo.
-    echo [i] You can run scans later by:
-    echo     1. Navigate to: %COMMANDS_DIR%
-    echo     2. Run individual scans: scan_scope1.bat, scan_subnet1.bat, etc.
-    echo     3. Run all scans: master_scan.bat
-    echo.
+for %%f in ("output\scope*.txt" "output\subnet*.txt") do (
+    for /f %%A in ('type "%%f"^|find "" /v /c') do (
+        if %%A equ 0 del "%%f"
+    )
 )
-
-echo [*] Operation completed
-pause
-exit /b 0
+rd /s /q "temp" 2>nul
 
 REM ===============================================================================
-REM                              Functions
+REM                              Nmap Path Check
 REM ===============================================================================
+echo [*] Configuring Nmap...
 
-:FIND_NMAP
-REM Check if path is stored
-if exist "%CONFIG_DIR%\nmap.txt" (
-    set /p NMAP_PATH=<"%CONFIG_DIR%\nmap.txt"
-    "!NMAP_PATH!" -h >nul 2>&1
+:NMAP_PATH_CHECK
+set "nmap_found=false"
+
+REM Check if path is stored in nmap.txt
+if exist "nmap.txt" (
+    set /p nmap_command=<nmap.txt
+    "!nmap_command!" -h >nul 2>&1
     if !errorlevel! equ 0 (
-        exit /b 0
+        set "nmap_found=true"
+        echo [+] Using nmap from saved path: !nmap_command!
+        goto NMAP_FOUND
     )
 )
 
-REM Check common locations
-for %%n in (
+REM Check common nmap locations
+for %%p in (
     "nmap.exe"
     "C:\Program Files\Nmap\nmap.exe"
     "C:\Program Files (x86)\Nmap\nmap.exe"
 ) do (
-    %%n -h >nul 2>&1
+    %%p -h >nul 2>&1
     if !errorlevel! equ 0 (
-        set "NMAP_PATH=%%n"
-        echo !NMAP_PATH!> "%CONFIG_DIR%\nmap.txt"
-        exit /b 0
+        set "nmap_command=%%p"
+        set "nmap_found=true"
+        echo [+] Found nmap at: %%p
+        echo %%p> nmap.txt
+        goto NMAP_FOUND
     )
 )
-set NMAP_ERROR=1
-exit /b 1
 
 :NMAP_INPUT
-echo [!] Nmap not found in common locations
-echo [?] Please enter the full path to nmap.exe
-echo     Example: C:\Program Files\Nmap\nmap.exe
-set /p "NMAP_PATH=Path: "
-
-if not exist "!NMAP_PATH!" (
-    echo [!] Invalid path. File does not exist.
-    goto :NMAP_INPUT
-)
-
-"!NMAP_PATH!" -h >nul 2>&1
-if !errorlevel! equ 0 (
-    echo !NMAP_PATH!> "%CONFIG_DIR%\nmap.txt"
-    echo [+] Nmap path verified and saved
-    set "NMAP_ERROR="
-) else (
-    echo [!] Invalid nmap executable. Please try again.
-    goto :NMAP_INPUT
-)
-exit /b 0
-
-:CREATE_SCAN_SCRIPT
-set "target_file=%~1"
-set "script_name=scan_%~n1.bat"
-
-echo @echo off > "%COMMANDS_DIR%\%script_name%"
-echo color 0A >> "%COMMANDS_DIR%\%script_name%"
-echo echo =============================================================================== >> "%COMMANDS_DIR%\%script_name%"
-echo echo                    Nmap Scan for %~nx1 >> "%COMMANDS_DIR%\%script_name%"
-echo echo =============================================================================== >> "%COMMANDS_DIR%\%script_name%"
-echo echo. >> "%COMMANDS_DIR%\%script_name%"
-echo echo [*] Starting scan at: %%date%% %%time%% >> "%COMMANDS_DIR%\%script_name%"
-echo echo [*] Target file: %~nx1 >> "%COMMANDS_DIR%\%script_name%"
-echo echo. >> "%COMMANDS_DIR%\%script_name%"
-echo "%NMAP_PATH%" -sS -Pn -p- -T4 -iL "%target_file%" -oA "%OUTPUT_DIR%\results\%~n1" --max-rtt-timeout 100ms --max-retries 3 --defeat-rst-ratelimit --min-rate 450 --max-rate 15000 >> "%COMMANDS_DIR%\%script_name%"
-echo echo. >> "%COMMANDS_DIR%\%script_name%"
-echo echo [*] Scan completed at: %%date%% %%time%% >> "%COMMANDS_DIR%\%script_name%"
-echo echo [*] Results saved to: %OUTPUT_DIR%\results\%~n1.* >> "%COMMANDS_DIR%\%script_name%"
-echo pause >> "%COMMANDS_DIR%\%script_name%"
-exit /b 0
-
-:SHOW_SCAN_MENU
-cls
-echo ===============================================================================
-echo                            Available Scan Files
-echo ===============================================================================
-echo.
-set "file_count=0"
-for %%f in ("%OUTPUT_DIR%\scope*.txt" "%OUTPUT_DIR%\subnet*.txt") do (
-    set /a "file_count+=1"
-    echo [!file_count!] %%~nxf
-)
-echo.
-set /p "scan_choice=Enter the number of the scan to run (1-%file_count%): "
-
-set "current_count=0"
-for %%f in ("%OUTPUT_DIR%\scope*.txt" "%OUTPUT_DIR%\subnet*.txt") do (
-    set /a "current_count+=1"
-    if !current_count! equ %scan_choice% (
-        cd "%COMMANDS_DIR%"
-        call scan_%%~nf.bat
-        exit /b 0
+if "!nmap_found!"=="false" (
+    echo [!] Nmap not found in common locations
+    echo [?] Please enter the full path to nmap.exe
+    echo     Example: C:\Program Files\Nmap\nmap.exe
+    set /p "nmap_path=Path: "
+    
+    if not exist "!nmap_path!" (
+        echo [!] Invalid path. File does not exist.
+        goto NMAP_INPUT
+    )
+    
+    "!nmap_path!" -h >nul 2>&1
+    if !errorlevel! equ 0 (
+        set "nmap_command=!nmap_path!"
+        echo !nmap_path!> nmap.txt
+        echo [+] Nmap path verified and saved
+    ) else (
+        echo [!] Invalid nmap executable. Please try again.
+        goto NMAP_INPUT
     )
 )
-echo [!] Invalid selection
-goto :SHOW_SCAN_MENU
+
+:NMAP_FOUND
+echo [+] Nmap configuration completed
+echo.
+
+REM ===============================================================================
+REM                              Scanning Section
+REM ===============================================================================
+echo [*] Starting Nmap scans...
+echo.
+for %%f in ("output\scope*.txt" "output\subnet*.txt") do (
+    echo [+] Scanning %%~nxf...
+    echo [+] Command: %nmap_command% -sS -Pn -p- -T4 -iL "%%f" -oA "output\open_port_%%~nf" --max-rtt-timeout 100ms --max-retries 3 --defeat-rst-ratelimit --min-rate 450 --max-rate 15000
+    "%nmap_command%" -sS -Pn -p- -T4 -iL "%%f" -oA "output\open_port_%%~nf" --max-rtt-timeout 100ms --max-retries 3 --defeat-rst-ratelimit --min-rate 450 --max-rate 15000
+    echo     - Scan completed for %%~nxf
+    echo.
+)
+
+REM ===============================================================================
+REM                              Completion
+REM ===============================================================================
+echo ===============================================================================
+echo                               Scan Summary
+echo ===============================================================================
+echo [+] All scans completed successfully
+echo [+] Processed %unique_ips% unique IP addresses
+echo [+] Processed %unique_subnets% unique subnets
+echo [+] Output files are located in the 'output' directory
+echo [+] Review the results in the generated .nmap, .xml, and .gnmap files
+echo.
+echo Press any key to exit...
+pause >nul
