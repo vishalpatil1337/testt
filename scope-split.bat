@@ -133,17 +133,6 @@ echo [*] Configuring Nmap...
 :NMAP_PATH_CHECK
 set "nmap_found=false"
 
-REM Check if path is stored in nmap.txt
-if exist "nmap.txt" (
-    set /p nmap_command=<nmap.txt
-    "!nmap_command!" -h >nul 2>&1
-    if !errorlevel! equ 0 (
-        set "nmap_found=true"
-        echo [+] Using nmap from saved path: !nmap_command!
-        goto NMAP_FOUND
-    )
-)
-
 REM Check common Nmap locations
 for %%p in (
     "C:\Program Files\Nmap\nmap.exe"
@@ -154,7 +143,6 @@ for %%p in (
         set "nmap_command=%%p"
         set "nmap_found=true"
         echo [+] Found Nmap at: %%p
-        echo %%p> nmap.txt
         goto NMAP_FOUND
     )
 )
@@ -163,7 +151,6 @@ for %%p in (
 if "!nmap_found!"=="false" (
     echo [!] Nmap not found in common locations
     echo [?] Please enter the path to the Nmap installation directory
-    echo     Example: C:\Program Files\Nmap
     set /p "nmap_path=Path: "
     
     REM Append nmap.exe to the user-provided path
@@ -176,8 +163,7 @@ if "!nmap_found!"=="false" (
     
     "!nmap_command!" -h >nul 2>&1
     if !errorlevel! equ 0 (
-        echo !nmap_command!> nmap.txt
-        echo [+] Nmap path verified and saved
+        echo [+] Nmap path verified.
     ) else (
         echo [!] Invalid nmap executable. Please try again.
         goto NMAP_INPUT
@@ -193,12 +179,11 @@ REM                              Scanning Section
 REM ===============================================================================
 echo [*] Starting Nmap scans...
 echo.
+
 for %%f in ("output\scope*.txt" "output\subnet*.txt") do (
-    echo [+] Scanning %%~nxf...
-    echo [+] Command: %nmap_command% -sS -Pn -p- -T4 -iL "%%f" -oA "output\open_port_%%~nf" --max-rtt-timeout 100ms --max-retries 3 --defeat-rst-ratelimit --min-rate 450 --max-rate 15000
-    "%nmap_command%" -sS -Pn -p- -T4 -iL "%%f" -oA "output\open_port_%%~nf" --max-rtt-timeout 100ms --max-retries 3 --defeat-rst-ratelimit --min-rate 450 --max-rate 15000
-    echo     - Scan completed for %%~nxf
-    echo.
+    echo [+] Opening a new Command Prompt for %%~nxf scan...
+    start cmd /k "!nmap_command! -sS -Pn -p- -T4 -iL %%f -oA output\open_port_%%~nf --max-rtt-timeout 100ms --max-retries 3 --defeat-rst-ratelimit --min-rate 450 --max-rate 15000"
+    timeout 2 >nul
 )
 
 REM ===============================================================================
@@ -207,11 +192,8 @@ REM ============================================================================
 echo ===============================================================================
 echo                               Scan Summary
 echo ===============================================================================
-echo [+] All scans completed successfully
-echo [+] Processed %unique_ips% unique IP addresses
-echo [+] Processed %unique_subnets% unique subnets
-echo [+] Output files are located in the 'output' directory
-echo [+] Review the results in the generated .nmap, .xml, and .gnmap files
+echo [+] All commands have been executed in separate Command Prompts.
+echo [+] Review the results in the generated .nmap, .xml, and .gnmap files in the 'output' folder.
 echo.
 echo Press any key to exit...
 pause >nul
