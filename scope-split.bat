@@ -144,9 +144,8 @@ if exist "nmap.txt" (
     )
 )
 
-REM Check common nmap locations
+REM Check common Nmap locations
 for %%p in (
-    "nmap.exe"
     "C:\Program Files\Nmap\nmap.exe"
     "C:\Program Files (x86)\Nmap\nmap.exe"
 ) do (
@@ -154,7 +153,7 @@ for %%p in (
     if !errorlevel! equ 0 (
         set "nmap_command=%%p"
         set "nmap_found=true"
-        echo [+] Found nmap at: %%p
+        echo [+] Found Nmap at: %%p
         echo %%p> nmap.txt
         goto NMAP_FOUND
     )
@@ -163,19 +162,21 @@ for %%p in (
 :NMAP_INPUT
 if "!nmap_found!"=="false" (
     echo [!] Nmap not found in common locations
-    echo [?] Please enter the full path to nmap.exe
-    echo     Example: C:\Program Files\Nmap\nmap.exe
+    echo [?] Please enter the path to the Nmap installation directory
+    echo     Example: C:\Program Files\Nmap
     set /p "nmap_path=Path: "
     
-    if not exist "!nmap_path!" (
-        echo [!] Invalid path. File does not exist.
+    REM Append nmap.exe to the user-provided path
+    set "nmap_command=!nmap_path!\nmap.exe"
+    
+    if not exist "!nmap_command!" (
+        echo [!] Invalid path. nmap.exe not found in the specified directory.
         goto NMAP_INPUT
     )
     
-    "!nmap_path!" -h >nul 2>&1
+    "!nmap_command!" -h >nul 2>&1
     if !errorlevel! equ 0 (
-        set "nmap_command=!nmap_path!"
-        echo !nmap_path!> nmap.txt
+        echo !nmap_command!> nmap.txt
         echo [+] Nmap path verified and saved
     ) else (
         echo [!] Invalid nmap executable. Please try again.
