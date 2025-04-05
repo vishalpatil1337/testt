@@ -14,3 +14,7 @@ SSLYZE Windows  : https://github.com/nabla-c0d3/sslyze/releases/download/6.1.0/s
 ](https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/EY46-NJbNolFgSzAMUFJPDcBHWvWCG7jYQjnt74Qu8mITg?e=SkxlnT)
 
 sqlmap : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/ETGKsyT8TNpKti1m0rbqnF4Bz-ZDViX9lbb0GcjRjLNXfg?e=qjB7Ow
+
+FW-REVIEW : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/EZFmqGW79MpDtg2LZC-XxagBNtgfm4B_Crvviq_nkn0NuA?e=UG8wFS
+
+FW-TEMPLATE : https://controlcaseint-my.sharepoint.com/:x:/g/personal/vipatil_controlcase_com/ESqiYKPvYnVKgNON7Q0m5cEBqV3l3UWhs7Q3gU5-x_TKtg?e=OcZz3X
