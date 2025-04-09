@@ -15,8 +15,6 @@ BURP : (https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlc
 
 sqlmap : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/ETGKsyT8TNpKti1m0rbqnF4Bz-ZDViX9lbb0GcjRjLNXfg?e=qjB7Ow
 
-FW-REVIEW : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/EZFmqGW79MpDtg2LZC-XxagBNtgfm4B_Crvviq_nkn0NuA?e=UG8wFS
+FW-REVIEW : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/EUG_AnNzDRRAlN21spt7iyABUUnbBrSZNwQuQdZBN-_WGQ?e=xfRx5W
 
 FW-TEMPLATE : https://controlcaseint-my.sharepoint.com/:x:/g/personal/vipatil_controlcase_com/ESqiYKPvYnVKgNON7Q0m5cEBqV3l3UWhs7Q3gU5-x_TKtg?e=OcZz3X
-
-segpt-file : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/EaVQkm3KHzZLuJYyNPS0q4sBqGbp7Pa3ObDQi_Gy7j4Fiw?e=BhJOYl
