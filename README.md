@@ -21,7 +21,4 @@ FW-REVIEW : [https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_con
 FW-TEMPLATE : https://controlcaseint-my.sharepoint.com/:x:/g/personal/vipatil_controlcase_com/ESqiYKPvYnVKgNON7Q0m5cEBqV3l3UWhs7Q3gU5-x_TKtg?e=OcZz3X
 
 
-Please download and install CDD 10.9 from
-https://home.controlcase.com/downloads/CDD_OnPrem_V10.9.0.1.exe
-Then download and install CDD 10.9.2.0 Upgrade Patch from
-https://home.controlcase.com/downloads/CDD_10.9.2.0_HTTPS_For_WinRM.exe
+https://www.transfernow.net/dl/202504097aV5EC6L
