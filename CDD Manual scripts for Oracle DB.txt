@@ -1,0 +1,62 @@
+Oracle DB Scripts : 
+
+
+1) Below is the select queries. Need to change “Main” to actual Database name.
+
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%CARD%'and c.owner='MAIN';
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%PIN%'and c.owner='MAIN';
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%Track%'and c.owner='MAIN';
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%CVV%'and c.owner='MAIN';
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%PAN%'and c.owner='MAIN';
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%CRD%'and c.owner='MAIN';
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%EXPIRY%'and c.owner='MAIN';
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%EXPRY%'and c.owner='MAIN';
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%DE2%'and c.owner='MAIN';
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%paN%'and c.owner='MAIN';
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%CC_NO
+%'and c.owner='MAIN';
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%sindex%'and c.owner='MAIN';
+
+select distinct table_name from dba_tab_columns c, dba_objects d where c.table_name=d.object_name and d.object_type='TABLE' and c.column_name like '%action_level_key%'and c.owner='MAIN';
+
+
+2) Encryption & Masking Check:
+For Oracle, you should verify the usage of Transparent Data Encryption (TDE) and Data Redaction/Masking. Suggested queries:
+
+a) Check if TDE is enabled (for tablespace-level encryption):
+
+SELECT tablespace_name, encrypted
+FROM dba_tablespaces
+WHERE encrypted = 'YES';
+
+b) Check column-level TDE encryption:
+
+SELECT table_name, column_name, encryption_alg, salt
+FROM dba_encrypted_columns
+WHERE owner = 'MAIN';
+
+
+c) Check Data Redaction (if Oracle Data Redaction is used):
+
+SELECT object_schema, object_name, policy_name, column_name, function_type
+FROM redaction_policies;
+
+
+3) Action Item – Masking/Encryption Validation:
+Please validate whether the identified card data fields (from the discovery queries) are encrypted, redacted, or otherwise protected.
+
+
+Share proof of controls (POCs) of above queries.
+

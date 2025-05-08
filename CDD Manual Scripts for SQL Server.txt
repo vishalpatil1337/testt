@@ -1,0 +1,118 @@
+Note : 
+
+1) Ensure the user running the queries has sufficient privileges: To access INFORMATION_SCHEMA.COLUMNS, they must have SELECT permissions on the database. To query encryption views like sys.dm_database_encryption_keys, they may need server-level permissions such as VIEW SERVER STATE.
+
+2) Confirm that the SQL Server version supports the system views and DMVs (sys.*) used in the queries. Older versions may require adjustments.
+
+What to Change:
+
+1) Replace POWERCARD with the correct schema name.
+2)Adjust %PAN% to the appropriate pattern (e.g., %CVV%, %Track%).
+
+________________________________________________________________
+
+
+
+1) Queries : 
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%CARD%' AND TABLE_SCHEMA = 'POWERCARD';
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%PIN%' AND TABLE_SCHEMA = 'POWERCARD';
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%Track%' AND TABLE_SCHEMA = 'POWERCARD';
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%CVV%' AND TABLE_SCHEMA = 'POWERCARD';
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%PAN%' AND TABLE_SCHEMA = 'POWERCARD';
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%CRD%' AND TABLE_SCHEMA = 'POWERCARD';
+
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%EXPIRY%' AND TABLE_SCHEMA = 'POWERCARD';
+
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%EXPRY%' AND TABLE_SCHEMA = 'POWERCARD';
+
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%DE2%' AND TABLE_SCHEMA = 'POWERCARD';
+
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%paN%' AND TABLE_SCHEMA = 'POWERCARD';
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%CC_NO%' AND TABLE_SCHEMA = 'POWERCARD';
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%sindex%' AND TABLE_SCHEMA = 'POWERCARD';
+
+SELECT DISTINCT TABLE_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%action_level_key%' AND TABLE_SCHEMA = 'POWERCARD';
+
+
+________________________________________________________________
+
+2) Checking Encryption : 
+
+
+SELECT DB_NAME(database_id) AS DatabaseName, encryption_state
+FROM sys.dm_database_encryption_keys;
+
+SELECT name AS DatabaseName, is_encrypted
+FROM sys.databases;
+
+
+________________________________________________________________
+
+3) Kindly confirm in given output (TABLE_NAME) Card data present in masked format or not, provide POCs for same
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
