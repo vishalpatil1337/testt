@@ -23,6 +23,4 @@ FW-TEMPLATE : https://controlcaseint-my.sharepoint.com/:x:/g/personal/vipatil_co
 
 https://controlcaseint-my.sharepoint.com/:u:/g/personal/pmaheshwari_controlcase_com/EWgiEmYZjS9HpFnGaLUbBQsBCg8V0M9_mprp63gx-MW8JQ?e=kqWtvX
 
-
-10.191.64.2/21
-10.188.30.2/24
+CDD PORTAL KEY : EwIBydsuD2jyjVzbl0OXzeY5zD144iRVIw==	
