@@ -23,8 +23,7 @@ FW-TEMPLATE : https://controlcaseint-my.sharepoint.com/:x:/g/personal/vipatil_co
 
 https://controlcaseint-my.sharepoint.com/:u:/g/personal/pmaheshwari_controlcase_com/EWgiEmYZjS9HpFnGaLUbBQsBCg8V0M9_mprp63gx-MW8JQ?e=kqWtvX
 
-CDD PORTAL KEY : EwIBydsuD2jyjVzbl0OXzeY5zD144iRVIw==	
-
-
 
 https://home.controlcase.com/downloads/CDD_SA_V10.9.3.0_Patch.exe
+
+nessus auth validation tool : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/Ecl8LH4rygxFt8ZZA_wk4b4B9ffRygzr5ESEjCLYQxHIpQ?e=52poG7
