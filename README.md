@@ -27,3 +27,6 @@ https://controlcaseint-my.sharepoint.com/:u:/g/personal/pmaheshwari_controlcase_
 https://home.controlcase.com/downloads/CDD_SA_V10.9.3.0_Patch.exe
 
 nessus auth validation tool : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/Ecl8LH4rygxFt8ZZA_wk4b4B9ffRygzr5ESEjCLYQxHIpQ?e=52poG7
+
+
+cdd template : https://controlcaseint-my.sharepoint.com/:w:/g/personal/vipatil_controlcase_com/ET22PMXIpJVOohhhhAZnveIBEYOOYfzDChmtPD05gtg_hw?e=0um1Kj
