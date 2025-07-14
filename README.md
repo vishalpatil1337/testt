@@ -34,4 +34,12 @@ cdd template : https://controlcaseint-my.sharepoint.com/:w:/g/personal/vipatil_c
 Segpt template : https://controlcaseint-my.sharepoint.com/:w:/g/personal/vipatil_controlcase_com/EdkU3tRf07RKn81DKVXQ84sB8-jnDGrJGb1WaoG6kk09iw?e=yEbRc0
 
 
-cdd : https://home.controlcase.com/downloads/CDD_SA_V10.9.3.0_Patch.exe
+Step 1 →
+Please download and install CDD 10.9 from
+https://home.controlcase.com/downloads/CDD_OnPrem_V10.9.0.1.exe
+Step 2 →
+Then download and install CDD 10.9.2.0 Upgrade Patch from
+https://home.controlcase.com/downloads/CDD_10.9.2.0_HTTPS_For_WinRM.exe
+Step 3 →
+Then download and install CDD 10.9.3.0 Upgrade Patch from
+https://home.controlcase.com/downloads/CDD_SA_V10.9.3.0_Patch.exe
