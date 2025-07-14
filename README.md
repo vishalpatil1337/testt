@@ -30,3 +30,5 @@ nessus auth validation tool : https://controlcaseint-my.sharepoint.com/:u:/g/per
 
 
 cdd template : https://controlcaseint-my.sharepoint.com/:w:/g/personal/vipatil_controlcase_com/ET22PMXIpJVOohhhhAZnveIBEYOOYfzDChmtPD05gtg_hw?e=0um1Kj
+
+Segpt template : https://controlcaseint-my.sharepoint.com/:w:/g/personal/vipatil_controlcase_com/EdkU3tRf07RKn81DKVXQ84sB8-jnDGrJGb1WaoG6kk09iw?e=yEbRc0
