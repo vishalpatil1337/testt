@@ -43,3 +43,10 @@ https://home.controlcase.com/downloads/CDD_10.9.2.0_HTTPS_For_WinRM.exe
 Step 3 →
 Then download and install CDD 10.9.3.0 Upgrade Patch from
 https://home.controlcase.com/downloads/CDD_SA_V10.9.3.0_Patch.exe
+
+
+
+
+Syhunt Key : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/EYYi6IiMw0FCos-sUAIip2UBRjsQ57aFL_G3mHoTviVYiA?e=jFcd7U
+
+Syhunt tool : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/EbwzNI2VRGVIi-XPHmgbc_UBfkps3jHiIP5r7m7FX7wT6g?e=DSDnUB
