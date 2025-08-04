@@ -20,9 +20,7 @@ FW-REVIEW : [https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_con
 
 FW-TEMPLATE : https://controlcaseint-my.sharepoint.com/:x:/g/personal/vipatil_controlcase_com/ESqiYKPvYnVKgNON7Q0m5cEBqV3l3UWhs7Q3gU5-x_TKtg?e=OcZz3X
 
-
-https://controlcaseint-my.sharepoint.com/:u:/g/personal/pmaheshwari_controlcase_com/EWgiEmYZjS9HpFnGaLUbBQsBCg8V0M9_mprp63gx-MW8JQ?e=kqWtvX
-
+https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/ER5j9LecI2ZNk1glfxsObhEBOmH8dQUTEdVfvBzR6fxtMw?e=a7ykjH
 
 https://home.controlcase.com/downloads/CDD_SA_V10.9.3.0_Patch.exe
 
