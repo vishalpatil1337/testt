@@ -49,3 +49,61 @@ https://home.controlcase.com/downloads/CDD_SA_V10.9.3.0_Patch.exe
 Syhunt Key : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/EYYi6IiMw0FCos-sUAIip2UBRjsQ57aFL_G3mHoTviVYiA?e=jFcd7U
 
 Syhunt tool : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/EbwzNI2VRGVIi-XPHmgbc_UBfkps3jHiIP5r7m7FX7wT6g?e=DSDnUB
+
+
+
+
+
+
+
+
+
+
+_____________________
+
+1 CORP.AD.SBI Domain Level Status Completed
+1.1 10.0.1.20 Completed Compliant
+1.2 10.176.38.68 Completed Compliant
+1.3 10.176.54.116 Completed Compliant
+1.4 10.176.54.193 Completed Compliant
+1.5 10.191.151.93 Completed Compliant
+1 (Linux) 10.176.39.102 Completed Compliant
+2 (Linux) 10.176.39.103 Completed Compliant
+3 (Linux) 10.176.39.104 Completed Compliant
+4 (Linux) 10.176.54.235 Completed Compliant
+5 (Linux) 10.191.145.83 Completed Compliant
+6 (Linux) 10.177.49.213 Completed Compliant
+7 (Linux) 10.191.69.185 Completed Compliant
+8 (Linux) 10.189.32.237 Completed Compliant
+9 (Linux) 10.189.32.238 Completed Compliant
+10 (Linux) 10.176.52.224 Completed Compliant
+11 (Linux) 10.191.150.126 Completed Compliant
+12 (Linux) 10.191.69.253 Completed Compliant
+13 (Linux) 10.191.70.171 Completed Compliant
+14 (Linux) 10.191.70.172 Completed Compliant
+15 (Linux) 10.191.70.173 Completed Compliant
+16 (Linux) 10.176.39.125 Completed Compliant
+17 (Linux) 10.176.44.210 Completed Compliant
+18 (Linux) 10.191.69.184 Completed Compliant
+19 (Linux) 10.189.32.239 Completed Compliant
+1 (Linux) 10.176.51.140 Completed Compliant
+2 (Linux) 10.191.148.27 Completed Compliant
+3 (Linux) 10.191.214.1 Completed Compliant
+4 (Linux) 10.176.53.234 Completed Compliant
+5 (Linux) EPSGWDR04 Completed Compliant
+6 (Linux) EPSGWPR01 Completed Compliant
+7 (Linux) EPSGWPR06 Completed Compliant
+8 (Linux) OMSAPPDR01 Completed Compliant
+9 (Linux) OMSAPPDR04 Completed Compliant
+10 (Linux) OMSAPPPR01 Completed Compliant
+11 (Linux) 10.176.53.172 Failed ( CCSearchX64 did not
+complete successfully on target
+machine.)
+12 (Linux) 10.176.53.173 Failed ( CCSearchX64 did not
+complete successfully on target
+machine.)
+
+
+
+
+
