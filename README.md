@@ -31,6 +31,7 @@ cdd template : https://controlcaseint-my.sharepoint.com/:w:/g/personal/vipatil_c
 
 Segpt template : https://controlcaseint-my.sharepoint.com/:w:/g/personal/vipatil_controlcase_com/EdkU3tRf07RKn81DKVXQ84sB8-jnDGrJGb1WaoG6kk09iw?e=yEbRc0
 
+APT Template report : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/Eck87gWIugpMm-FFrMt5TMgBgeiPYlWSzyPcm63wjVTofw?e=EPegJ0
 
 Step 1 →
 Please download and install CDD 10.9 from
