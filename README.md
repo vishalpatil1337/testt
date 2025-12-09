@@ -43,7 +43,7 @@ Step 3 →
 Then download and install CDD 10.9.3.0 Upgrade Patch from
 https://home.controlcase.com/downloads/CDD_SA_V10.9.3.0_Patch.exe
 
-
+cdd manual script : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/EVCJkwPxc_xKvv6qgkv6Ru4Bgj6nTEDD41umnESzW0zZDQ?e=7BRvX7
 
 
 Syhunt Key : https://controlcaseint-my.sharepoint.com/:u:/g/personal/vipatil_controlcase_com/EWt9h4SarslNvd5OJ0cDhiIB7AakXuM0www6F9aNdcpHAA?e=Y8cC4Z
