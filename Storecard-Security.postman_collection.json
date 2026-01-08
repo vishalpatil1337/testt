@@ -1,0 +1,306 @@
+{
+	"info": {
+		"_postman_id": "eb373c02-95b4-4a7e-b143-480e843ab5dd",
+		"name": "Storecard-Security",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4195493"
+	},
+	"item": [
+		{
+			"name": "token",
+			"item": [
+				{
+					"name": "save card NetworkToken (Tokenization)",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "merchant_user_id",
+									"value": "user3",
+									"type": "text"
+								},
+								{
+									"key": "merchant_id",
+									"value": "134902",
+									"type": "text"
+								},
+								{
+									"key": "auth_service",
+									"value": "auth2",
+									"type": "text"
+								},
+								{
+									"key": "merchant_key",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "card_name",
+									"value": "demo",
+									"type": "text"
+								},
+								{
+									"key": "name_on_card",
+									"value": "SartajTest1",
+									"type": "text"
+								},
+								{
+									"key": "card_no",
+									"value": "5506900480000008",
+									"type": "text"
+								},
+								{
+									"key": "card_expiry_mon",
+									"value": "12",
+									"type": "text"
+								},
+								{
+									"key": "card_expiry_yr",
+									"value": "2025",
+									"type": "text"
+								},
+								{
+									"key": "card_mode",
+									"value": "CC",
+									"type": "text"
+								},
+								{
+									"key": "card_type",
+									"value": "MAST",
+									"type": "text"
+								},
+								{
+									"key": "card_cvv",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "card_token",
+									"value": "TEST1234566",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "abc@def.xyz",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "9900308631",
+									"type": "text"
+								},
+								{
+									"key": "token_gen_type",
+									"value": "0",
+									"type": "text"
+								},
+								{
+									"key": "one_click_flow",
+									"value": "VSC",
+									"type": "text"
+								},
+								{
+									"key": "one_click_card_alias",
+									"value": "457D11F3AB8F85A0E9DEA3F4AFB0D3E0F8AA4F8D",
+									"type": "text"
+								},
+								{
+									"key": "one_click_status",
+									"value": "Registered",
+									"type": "text"
+								},
+								{
+									"key": "is_consumer_consent_received",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "is_AF_authenticated",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "auth_ref_id",
+									"value": "123",
+									"type": "text"
+								},
+								{
+									"key": "dpa_id",
+									"value": "src_dpa_180012",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "service_id",
+									"value": "SECURE_COF_MERCHANT_OBO#SCOF_PASSKEY-KOEFPI#01",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "card_hash",
+									"value": "dummyCardHash",
+									"type": "text"
+								},
+								{
+									"key": "card_hashV2",
+									"value": "1ee43e1b6554d4c0744c31227d7e8e6f7e8ee5d280bd5f8947f9241dd576c419",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{hostPort}}/storecard/v3/carddetail",
+							"host": [
+								"{{hostPort}}"
+							],
+							"path": [
+								"storecard",
+								"v3",
+								"carddetail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET tokenDetail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{hostPort}}/storecard/v3/int/carddetail?merchant_id=134902&auth_service=sartaj2&merchant_user_id=inf1o",
+							"host": [
+								"{{hostPort}}"
+							],
+							"path": [
+								"storecard",
+								"v3",
+								"int",
+								"carddetail"
+							],
+							"query": [
+								{
+									"key": "sub_merchant_id",
+									"value": "AG",
+									"disabled": true
+								},
+								{
+									"key": "show_expired_card",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "instruments",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "merchant_id",
+									"value": "134902"
+								},
+								{
+									"key": "auth_service",
+									"value": "sartaj2"
+								},
+								{
+									"key": "merchant_user_id",
+									"value": "inf1o"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cryptogram",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{hostPort}}/storecard/v3/token-data?card_token=11e7cf6d5008b33403ade&merchant_id=134902&auth_service=auth1&merchant_user_id=user3",
+							"host": [
+								"{{hostPort}}"
+							],
+							"path": [
+								"storecard",
+								"v3",
+								"token-data"
+							],
+							"query": [
+								{
+									"key": "card_token",
+									"value": "11e7cf6d5008b33403ade"
+								},
+								{
+									"key": "merchant_id",
+									"value": "134902"
+								},
+								{
+									"key": "auth_service",
+									"value": "auth1"
+								},
+								{
+									"key": "merchant_user_id",
+									"value": "user3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AltId",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "mid",
+								"value": "2"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"clientReferenceId\": null,\n    \"cardNumber\":\"4895380115392363\",\n    \"nameOnCard\":\"Jagadesh Reddy\",\n    \"cardType\":\"VISA\",\n    \"expiryMonth\":\"12\",\n    \"expiryYear\":\"2025\",\n    \"cvv\":\"538\",\n    \"acquirerMerchantId\":\"PAYUGCMID1\",\n    \"mail\": \"jagadesh@reddy.com\",\n    \"amount\": \"100\",\n    \"authenticationCode\": null,\n    \"payUCardHash\": \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostPort}}/storecard/v1/card/altid",
+							"host": [
+								"{{hostPort}}"
+							],
+							"path": [
+								"storecard",
+								"v1",
+								"card",
+								"altid"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
